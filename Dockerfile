@@ -1,13 +1,6 @@
 FROM ubuntu:18.04
 
-ENV USER=yandex-disk \
-    HOME=/yandex-disk \
-    DATA=$HOME/data
-
 RUN set -x \
- # Add non-root user.
- && useradd -m -d $HOME $USER \
- && chown -R $USER:$USER $HOME \
  # Install deps.
  && apt-get update \
  && apt-get install -y -qq --no-install-recommends --no-install-suggests wget gpg gpg-agent \
@@ -20,9 +13,8 @@ RUN set -x \
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-USER $USER
-VOLUME $HOME
-WORKDIR $HOME
+VOLUME /root/Yandex.Disk \
+       /root/.config/yandex-disk
 
 ENTRYPOINT ["yandex-disk"]
-CMD ["start", "--no-daemon", "--dir=$DATA"]
+CMD ["start", "--no-daemon", "--dir=~/Yandex.Disk"]
