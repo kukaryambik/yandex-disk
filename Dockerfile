@@ -9,12 +9,12 @@ RUN set -x \
  && wget http://repo.yandex.ru/yandex-disk/YANDEX-DISK-KEY.GPG -qO- | apt-key add - \
  && apt-get update \
  && apt-get install -y yandex-disk \
+ && mkdir -p /yandex-disk/data \
  # Cleanup
  && apt-get clean \
  && rm -rf /var/lib/apt/lists/*
 
-VOLUME /root/Yandex.Disk \
-       /root/.config/yandex-disk
+VOLUME /yandex-disk
 
-ENTRYPOINT ["yandex-disk"]
-CMD ["start", "--no-daemon", "--dir=~/Yandex.Disk"]
+ENTRYPOINT ["yandex-disk", "--dir=/yandex-disk/data", "--auth=/yandex-disk/token"]
+CMD ["start", "--no-daemon"]
